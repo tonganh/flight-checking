@@ -1,0 +1,33 @@
+name: Daily Flight Tracker
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every day. You can change this cron timing.
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows you to run it manually from the Actions tab
+
+jobs:
+  track-flights:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install chromium
+
+      - name: Run Flight Tracker
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python main.py

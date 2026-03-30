@@ -1,0 +1,2 @@
+# Run the bot script at 8:30 PM daily (GMT+7)
+30 20 * * * /usr/local/bin/python /app/main.py >> /var/log/cron.log 2>&1

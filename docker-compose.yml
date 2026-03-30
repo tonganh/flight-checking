@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  flight-bot:
+    build:
+      context: .
+    volumes:
+      - .:/app # Mount the current directory into /app inside the container
+    env_file:
+      - .env # Load the .env file
+    container_name: flight-bot-container
+    command: sh -c "cron && touch /var/log/cron.log && tail -f /var/log/cron.log"
+    networks:
+      - share_network
+networks:
+  share_network:
+    external: true
